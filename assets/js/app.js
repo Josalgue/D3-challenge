@@ -1,4 +1,4 @@
-// Define SVG attributes
+// Define chart attributes
 var width = parseInt(d3.select('#scatter')
     .style("width"));
 
@@ -14,12 +14,11 @@ var svg = d3.select("#scatter")
     .attr("height", height)
     .attr("class", "chart");
 
-// Labels for axes=================================
-// Add first g - tag for x axis text (css class)
+// Create labels for axes=================================
 svg.append("g").attr("class", "xText");
 var xText = d3.select(".xText");
 
-// Transform to adjust for xText
+// Adjust for xText
 var bottomTextX =  (width - labelArea)/2 + labelArea;
 var bottomTextY = height - margin - padding;
 xText.attr("transform",`translate(
@@ -27,8 +26,7 @@ xText.attr("transform",`translate(
     ${bottomTextY})`
     );
 
-// x-axis (bottom) ______________________________
-// Build xText details (css class)
+// Define xText with CSS attributes
 xText.append("text")
     .attr("y", -19)
     .attr("data-name", "poverty")
@@ -50,12 +48,11 @@ xText.append("text")
     .attr("class","aText inactive x")
     .text("Household Income (Median)");
 
-// y-axis (left)___________________________________
-// Second g tag for yText (css class)
+
 svg.append("g").attr("class", "yText");
 var yText = d3.select(".yText");
 
-// Transform to adjust for yText
+// Adjust for yText
 var leftTextX =  margin + padding;
 var leftTextY = (height + labelArea) / 2 - labelArea;
 yText.attr("transform",`translate(
@@ -64,7 +61,7 @@ yText.attr("transform",`translate(
     )rotate(-90)`
     );
 
-// Build yText details (css class)
+// Define yText with CSS attributes
 yText .append("text")
     .attr("y", -22)
     .attr("data-name", "obesity")
@@ -86,8 +83,7 @@ yText .append("text")
     .attr("class", "aText inactive y")
     .text("Lacks Healthcare (%)");
     
-// Visualize data  _______________________________________  
-// Define dynamic circle radius
+// Define circles radius
 var cRadius;
 function adjustRadius() {
   if (width <= 530) {
@@ -97,7 +93,7 @@ function adjustRadius() {
 }
 adjustRadius();
 
-// Read in data as promise... and then... newer d3.js method
+// Read data as promise with function
 d3.csv("assets/data/data.csv").then(function(data) {
     visualize(data);
 });
@@ -108,11 +104,11 @@ function visualize (csvData) {
    var yMin;
    var yMax;
 
-   // Current X & Y default selections
+   // Define X and Y default selections
    var currentX = "poverty";
    var currentY = "obesity";
 
-   // Tool Tip info box (state, X stats,  Y stats)
+   // Tool Tip info box 
    var toolTip = d3.tip()
       .attr("class", "d3-tip")
       .offset([40, -60])
@@ -127,7 +123,7 @@ function visualize (csvData) {
             return stateLine + xLine + yLine  
         });
 
-    // Add toolTip to svg
+    // Add toolTip to chart
     svg.call(toolTip);
 
     // Update upon axis option clicked
@@ -139,11 +135,11 @@ function visualize (csvData) {
             .classed("active", false)
             .classed("inactive", true);
     
-        // switch the text just clicked to active
+        // Switch the text just clicked to active
         clickText.classed("inactive", false).classed("active", true);
         }
 
-    // Find the data max & min values for scaling
+    // Find the maximum & minimum values for scaling
     function xMinMax() {
       xMin = d3.min(csvData, function(d) {
         return parseFloat(d[currentX]) * 0.85;
@@ -162,7 +158,7 @@ function visualize (csvData) {
       }); 
     }
 
-    // Scatter plot X & Y axis computation
+    // Scatter plot X & Y axis definition
     xMinMax();
     yMinMax();
 
@@ -193,7 +189,7 @@ function visualize (csvData) {
     }
     tickCount();
 
-    // append axis to the svg as group elements
+    // append axis to the chart as group elements
     svg.append("g")
         .call(xAxis)
         .attr("class", "xAxis")
@@ -238,7 +234,7 @@ function visualize (csvData) {
             d3.select(this).style("stroke", "#e3e3e3")
         });
 
-        // Apply state text on circles (dx & dy are locations)
+        // Append state texts to circles 
         allCircles
             .append("text")
             .attr("font-size", cRadius)
@@ -343,7 +339,7 @@ function visualize (csvData) {
 }
 
 
-// "With grattitude for those that are thoughtful, kind and contribute to the end result" ~Verna Orsatti
+
 
 
 
